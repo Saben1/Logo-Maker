@@ -1,64 +1,91 @@
-// import the inquirer module
-const inquirer = require("inquirer");
-const SVG = require("./lib/SVG");
-// create path for each shape class
-const { Circle, Square, Triangle } = require("./lib/Shapes");
-const { writeFile } = require("fs").promises;
-// question prompts for the user that takes user's input to use for the logo 
+const fs = require('fs');
+const inquirer = require('inquirer');
+const {Triangle, Circle, Square} = require('./lib/shapes');
+
 const questions = [
     {
-        type: "input",
-        name: "text",
-        message: "Enter up to three characters for the logo:",
-        validate: function (value) {
-            if (value.length > 3) {
-                return "Please enter up to three characters.";
+        type: 'input',
+        name :'text',
+        message : 'Enter text for logo (please enter 3 characters)',
+    
+        validate: (response) => {
+            if (response.length > 3) {
+                 console.log("\n Text must be three characters or less! Please try again ");
+                 return;     
             }
-            return true;
+            return true;         
         }
+        
+    },
+
+    {
+        type: 'input',
+        name :'textColor',
+        message : 'Enter color keyword  or a hexadecimal number of the text',
+
     },
     {
-        type: "list",
-        name: "shapeType",
-        message: "Choose a shape:",
-        choices: ["Circle", "Square", "Triangle"]
+        type: 'list',
+        name :'shapeType',
+        message : 'Select shape of the logo',
+        choices : ['Circle','Square','Triangle'],
+
     },
     {
-        type: "input",
-        name: "textColor",
-        message: "Enter a color for the text (keyword or hexadecimal number):",
+        type: 'input',
+        name :'shapeColor',
+        message : 'Enter color keyword  or a hexadecimal number of the text',
+
     },
-    {
-        type: "input",
-        name: "shapeColor",
-        message: "Enter a color for the shape (keyword or hexadecimal number):",
-    },
+
 ];
+inquirer.prompt(questions)
+.then((response) => {
+    const text = response.text;
+    const textColor = response.textColor;
+    const shapeType = response.shapeType;
+    const shapeColor = response.shapeColor;
 
-// Prompt the user for the logo's text, shape, and colors
-// Create a new instance of the SVG class
+         generateShapes(text,textColor,shapeType,shapeColor);
+})
+.catch((err) => console.log(err));
 
-inquirer.prompt(questions).then(({ text, textColor, shapeType, shapeColor }) => {
-    let shape;
-
-    switch (shapeType) {
-        case 'Triangle':
-            shape = new Triangle();
-            break;
-        case 'Circle':
-            shape = new Circle();
-            break;
-        default:
-            shape = new Square();
-            break;
+function generateShapes(text, textColor, shapeType, shapeColor) {
+    if (shapeType === 'Triangle') {
+        const triangle = new Triangle(text, textColor, shapeColor)
+        return fs.writeFile('logo.svg',triangle.render(),(err) => {
+            if(err) {
+                console.log(err);
+            }
+            else {
+                console.log("Generated logo.svg!");
+            }
+        });   
+       
     }
 
-    shape.setColor(shapeColor)
-    const svg = new SVG()
-    svg.setText(text, textColor)
-    svg.setShape(shape)
-    return writeFile("./examples/logo.svg", svg.render())
-})
-    .then(() => console.log("Generated logo.svg"))
+    if (shapeType === 'Circle') {
+        const circle = new Circle(text, textColor, shapeColor)
+        return fs.writeFile('logo.svg',circle.render(),(err) => {
+            if(err) {
+                console.log(err);
+            }
+            else {
+                console.log("Generated logo.svg!");
+            }
+        });   
+    }
 
-    .catch(err => console.log(err));  
+    if (shapeType === 'Square') {
+        const square = new Square(text, textColor, shapeColor)
+        return fs.writeFile('logo.svg',square.render(),(err) => {
+            if(err) {
+                console.log(err);
+            }
+            else {
+                console.log("Generated logo.svg!");
+            }
+        });   
+    }
+
+}

@@ -1,21 +1,29 @@
 {
-  "name": "logomaker",
+  "name": "logo-creater-svg",
   "version": "1.0.0",
+  "description": "Object-oriented Programming Challenge: SVG Logo Maker",
+  "main": "index.js",
+  "directories": {
+    "lib": "lib"
+  },
   "scripts": {
     "test": "jest"
   },
-  "devDependencies": {
-    "jest": "^27.5.1"
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/shruthisalimath/Logo-Creater-SVG.git"
   },
-  "dependencies": {
-    "inquirer": "^9.2.6"
-  },
-  "main": "index.js",
-  "directories": {
-    "example": "examples",
-    "lib": "lib"
-  },
+  "keywords": [],
   "author": "",
   "license": "ISC",
-  "description": ""
+  "bugs": {
+    "url": "https://github.com/shruthisalimath/Logo-Creater-SVG/issues"
+  },
+  "homepage": "https://github.com/shruthisalimath/Logo-Creater-SVG#readme",
+  "dependencies": {
+    "inquirer": "^8.2.5"
+  },
+  "devDependencies": {
+    "jest": "^29.5.0"
+  }
 }
