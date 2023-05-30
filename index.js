@@ -1,53 +1,64 @@
-const inquirer = require('inquirer');
-const Input = require('./input');
-const File = require('./file');
-const { Triangle, Circle, Square } = require('./shapes');
-
-async function promptUser() {
-  const input = await inquirer.prompt([
+// import the inquirer module
+const inquirer = require("inquirer");
+const SVG = require("./lib/SVG");
+// create path for each shape class
+const { Circle, Square, Triangle } = require("./lib/Shapes");
+const { writeFile } = require("fs").promises;
+// question prompts for the user that takes user's input to use for the logo 
+const questions = [
     {
-      type: 'input',
-      name: 'text',
-      message: 'Enter the text for the logo:',
+        type: "input",
+        name: "text",
+        message: "Enter up to three characters for the logo:",
+        validate: function (value) {
+            if (value.length > 3) {
+                return "Please enter up to three characters.";
+            }
+            return true;
+        }
     },
     {
-      type: 'list',
-      name: 'shape',
-      message: 'Choose a shape:',
-      choices: ['Triangle', 'Circle', 'Square'],
+        type: "list",
+        name: "shapeType",
+        message: "Choose a shape:",
+        choices: ["Circle", "Square", "Triangle"]
     },
     {
-      type: 'input',
-      name: 'color',
-      message: 'Enter the text color:',
+        type: "input",
+        name: "textColor",
+        message: "Enter a color for the text (keyword or hexadecimal number):",
     },
-  ]);
-  
-  return new Input(input.text, input.shape, input.color);
-}
+    {
+        type: "input",
+        name: "shapeColor",
+        message: "Enter a color for the shape (keyword or hexadecimal number):",
+    },
+];
 
-async function generateLogo() {
-  const input = await promptUser();
-  let shape;
-  
-  switch (input.shape) {
-    case 'Triangle':
-      shape = new Triangle(input.color);
-      break;
-    case 'Circle':
-      shape = new Circle(input.color);
-      break;
-    case 'Square':
-      shape = new Square(input.color);
-      break;
-    default:
-      console.log('Invalid shape');
-      return;
-  }
-  
-  const svg = shape.render(input.text);
-  File.save('logo.svg', svg);
-  console.log('Generated logo.svg');
-}
+// Prompt the user for the logo's text, shape, and colors
+// Create a new instance of the SVG class
 
-generateLogo();
+inquirer.prompt(questions).then(({ text, textColor, shapeType, shapeColor }) => {
+    let shape;
+
+    switch (shapeType) {
+        case 'Triangle':
+            shape = new Triangle();
+            break;
+        case 'Circle':
+            shape = new Circle();
+            break;
+        default:
+            shape = new Square();
+            break;
+    }
+
+    shape.setColor(shapeColor)
+    const svg = new SVG()
+    svg.setText(text, textColor)
+    svg.setShape(shape)
+    return writeFile("./examples/logo.svg", svg.render())
+})
+    .then(() => console.log("Generated logo.svg"))
+
+    .catch(err => console.log(err));  
