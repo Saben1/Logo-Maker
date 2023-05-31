@@ -39,4 +39,4 @@ The application includes test cases to ensure the correctness of the shape class
 
 ## License
 
-This project is licensed under the [MIT License](LICENSE).
+This project is licensed under the ISC (LICENSE).
