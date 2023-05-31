@@ -30,6 +30,9 @@ The application supports three shapes: Circle, Square, and Triangle. Each shape 
 
 If you want to add more shapes or modify the existing ones, you can do so by extending the `shapes` class and implementing the `render` method to generate the desired SVG code.
 
+## Demo video
+https://github.com/Saben1/Logo-Maker/issues/1#issue-1734100352
+
 ## Testing
 
 The application includes test cases to ensure the correctness of the shape classes and their rendering capabilities. The tests are defined using the Jest testing framework and can be executed by running the command `npm test` in the project directory.
